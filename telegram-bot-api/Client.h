@@ -182,8 +182,6 @@ class Client final : public WebhookActor::Callback {
   class JsonMessagesArray;
   class JsonProxy;
   class JsonProxiesArray;
-
-  class JsonHistory;
   //stop custom Json objects
 
   class TdOnOkCallback;

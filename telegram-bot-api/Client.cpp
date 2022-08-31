@@ -2991,16 +2991,6 @@ class Client::JsonProxiesArray : public Jsonable {
   object_ptr<td_api::proxies> &proxies_;
 };
 
-class Client::JsonHistory : public Jsonable {
-  JsonHistory(){
-
-  }
-
-  void store(JsonValueScope *scope){
-
-  }
-};
-
 //end custom Json objects impl
 
 class Client::TdOnOkCallback final : public TdQueryCallback {
