@@ -182,6 +182,8 @@ class Client final : public WebhookActor::Callback {
   class JsonMessagesArray;
   class JsonProxy;
   class JsonProxiesArray;
+
+  class JsonHistory;
   //stop custom Json objects
 
   class TdOnOkCallback;
@@ -234,6 +236,8 @@ class Client final : public WebhookActor::Callback {
   class TdOnGetCallbackQueryAnswerCallback;
   class TdOnGetProxiesQueryCallback;
   class TdOnAddProxyQueryCallback;
+
+  class TdOnGetHistoryCallback;
   //end custom callbacks
 
   void on_get_reply_message(int64 chat_id, object_ptr<td_api::message> reply_to_message);
@@ -491,9 +495,8 @@ class Client final : public WebhookActor::Callback {
 
   static td::Result<object_ptr<td_api::inputMessageInvoice>> get_input_message_invoice(const Query *query);
 
-  static object_ptr<td_api::messageSendOptions> get_message_send_options(bool disable_notification,
-                                                                         bool protect_content,
-                                                                         object_ptr<td_api::MessageSchedulingState> &&scheduling_state);
+  static object_ptr<td_api::messageSendOptions> get_message_send_options(
+      bool disable_notification, bool protect_content, object_ptr<td_api::MessageSchedulingState> &&scheduling_state);
 
   static td::Result<td::vector<td::string>> get_poll_options(const Query *query);
 
@@ -656,12 +659,13 @@ class Client final : public WebhookActor::Callback {
   Status process_get_scheduled_messages_query(PromisedQueryPtr &query);
   Status process_edit_message_scheduling_query(PromisedQueryPtr &query);
 
+  Status process_get_history_query(PromisedQueryPtr &query);
+
   //custom auth methods
   void process_auth_phone_number_query(PromisedQueryPtr &query);
   void process_authcode_query(PromisedQueryPtr &query);
   void process_2fapassword_query(PromisedQueryPtr &query);
   void process_register_user_query(PromisedQueryPtr &query);
-
 
   void webhook_verified(td::string cached_ip_address) final;
   void webhook_success() final;

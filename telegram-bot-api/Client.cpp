@@ -338,6 +338,7 @@ bool Client::init_methods() {
   methods_.emplace("getscheduledmessages", &Client::process_get_scheduled_messages_query);
   methods_.emplace("editmessagescheduling", &Client::process_edit_message_scheduling_query);
 
+  methods_.emplace("gethistory", &Client::process_get_history_query);
   return true;
 }
 
@@ -2990,6 +2991,16 @@ class Client::JsonProxiesArray : public Jsonable {
   object_ptr<td_api::proxies> &proxies_;
 };
 
+class Client::JsonHistory : public Jsonable {
+  JsonHistory(){
+
+  }
+
+  void store(JsonValueScope *scope){
+
+  }
+};
+
 //end custom Json objects impl
 
 class Client::TdOnOkCallback final : public TdQueryCallback {
@@ -4386,6 +4397,31 @@ class Client::TdOnAddProxyQueryCallback : public TdQueryCallback {
   }
 
  private:
+  PromisedQueryPtr query_;
+};
+
+class Client::TdOnGetHistoryCallback : public TdQueryCallback {
+ public:
+  explicit TdOnGetHistoryCallback(Client *client, PromisedQueryPtr query)
+      : client_(client), query_(std::move(query)) {
+  }
+  explicit TdOnGetHistoryCallback(PromisedQueryPtr query) : query_(std::move(query)) {
+    CHECK(query_ != nullptr);
+  }
+
+  void on_result(object_ptr<td_api::Object> result) override {
+    if (result->get_id() == td_api::error::ID) {
+      return fail_query_with_error(std::move(query_), move_object_as<td_api::error>(result));
+    }
+
+    CHECK(result->get_id() == td_api::messages::ID);
+
+    auto messages = move_object_as<td_api::messages>(result);
+    answer_query(JsonMessagesArray(messages, client_), std::move(query_));
+  }
+
+ private:
+  Client* client_;
   PromisedQueryPtr query_;
 };
 
@@ -9877,6 +9913,22 @@ td::Status Client::process_edit_message_scheduling_query(PromisedQueryPtr &query
                send_request(make_object<td_api::editMessageSchedulingState>(chat_id, message_id, std::move(send_at)),
                             td::make_unique<TdOnOkQueryCallback>(std::move(query)));
              });
+  return Status::OK();
+}
+
+td::Status Client::process_get_history_query(PromisedQueryPtr &query) {
+  auto chat_id = query->arg("chat_id");
+  td::int32 from_message = get_integer_arg(query.get(), "from_message", 0); // 0 - to start from latest. 1 - from oldest
+  td::int32 offset = get_integer_arg(query.get(), "offset", 0);
+  td::int32 limit = get_integer_arg(query.get(), "limit", 200, 0, 200);
+  bool local = to_bool(query->arg("local"));
+
+  check_chat(chat_id, AccessRights::Read, std::move(query),
+            [this, from_message, offset, limit, local](int64 chat_id, PromisedQueryPtr query) mutable {
+              send_request(make_object<td_api::getChatHistory>(chat_id, from_message, offset, limit, local),
+                td::make_unique<TdOnGetHistoryCallback>(this, std::move(query)));
+            });  
+
   return Status::OK();
 }
 
