@@ -16,14 +16,13 @@ steps:
   - name: build image
     image: thegeeklab/drone-docker-buildx
     privileged: true
-    environment:
-      URL:
-        from_secret: git_url
     settings:
       username: 
         from_secret: git_user
       password: 
         from_secret: git_pass
-      repo: 
+      registry: 
         from_secret: git_url
+      repo: 
+        from_secret: images/tdlight-botapi
       tags: latest
