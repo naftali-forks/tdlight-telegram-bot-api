@@ -1,9 +1,14 @@
 #!/bin/sh
 set -e
 
-
 USERNAME=telegram-bot-api
 GROUPNAME=telegram-bot-api
+if [ -n "$TELEGRAM_USERNAME" ]; then
+  USERNAME=${TELEGRAM_USERNAME}
+fi
+if [ -n "$TELEGRAM_GROUPNAME" ]; then
+  GROUPNAME=${TELEGRAM_GROUPNAME}
+fi
 
 chown ${USERNAME}:${GROUPNAME} "${TELEGRAM_WORK_DIR}" "${TELEGRAM_TEMP_DIR}"
 
