@@ -26,4 +26,5 @@ steps:
         from_secret: git_url
       repo: 
         from_secret: images/tdlight-botapi
+      build_args: '--push'
       # tags: latest
