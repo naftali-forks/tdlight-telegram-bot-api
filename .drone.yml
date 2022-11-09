@@ -24,5 +24,6 @@ steps:
         from_secret: git_user
       password: 
         from_secret: git_pass
-      repo: $${URL}/images/tdlight-botapi
+      repo: 
+        from_secret: git_url
       tags: latest
