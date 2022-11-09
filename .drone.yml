@@ -8,6 +8,11 @@ platform:
 
 
 steps:
+  - name: submodules
+    image: alpine/git
+    commands:
+    - git submodule update --init --recursive
+
   - name: build image
     image: thegeeklab/drone-docker-buildx
     privileged: true
