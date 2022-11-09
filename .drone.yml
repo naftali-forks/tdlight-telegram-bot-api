@@ -17,7 +17,7 @@ steps:
     image: thegeeklab/drone-docker-buildx
     privileged: true
     settings:
-      debug: true
+      auto_tag: true
       username: 
         from_secret: git_user
       password: 
