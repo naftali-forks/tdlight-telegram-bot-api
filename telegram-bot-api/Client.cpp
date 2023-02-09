@@ -4721,7 +4721,7 @@ class Client::TdOnGetHistoryCallback : public TdQueryCallback {
     CHECK(result->get_id() == td_api::messages::ID);
 
     auto messages = move_object_as<td_api::messages>(result);
-    answer_query(JsonMessagesArray(messages, client_), std::move(query_));
+    answer_query(JsonMessagesArray(messages->messages_, client_), std::move(query_));
   }
 
  private:
