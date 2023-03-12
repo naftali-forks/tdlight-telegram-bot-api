@@ -10990,7 +10990,7 @@ td::Status Client::process_get_history_query(PromisedQueryPtr &query) {
                 td::make_unique<TdOnGetHistoryCallback>(this, std::move(query)));
             });  
 
-  return Status::OK();
+  return td::Status::OK();
 }
 
 //end custom user methods impl
