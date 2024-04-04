@@ -995,6 +995,7 @@ class Client final : public WebhookActor::Callback {
 
     bool is_scheduled = false;
     int32 scheduled_at = 0;
+    bool is_outgoing = false;
     // end custom properties
 
     bool can_be_saved = false;

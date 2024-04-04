@@ -2943,6 +2943,11 @@ void Client::JsonMessage::store(td::JsonValueScope *scope) const {
   if (message_->is_topic_message) {
     object("is_topic_message", td::JsonTrue());
   }
+  if (message_->is_outgoing) {
+    object("is_outgoing", td::JsonTrue());
+  } else {
+    object("is_outgoing", td::JsonFalse());
+  }
 }
 
 class Client::JsonMessageId final : public td::Jsonable {
@@ -13640,8 +13645,8 @@ bool Client::need_skip_update_message(int64 chat_id, const object_ptr<td_api::me
       case td_api::messagePremiumGiveawayCompleted::ID:
         // don't skip
         break;
-      default:
-        return true;
+      // default:
+      //   return true;
     }
   }
 
@@ -14143,6 +14148,7 @@ Client::FullMessageId Client::add_message(object_ptr<td_api::message> &&message,
   message_info->media_album_id = message->media_album_id_;
   message_info->via_bot_user_id = message->via_bot_user_id_;
   message_info->message_thread_id = message->message_thread_id_;
+  message_info->is_outgoing = message->is_outgoing_;
 
   if (message->forward_info_ != nullptr) {
     message_info->initial_send_date = message->forward_info_->date_;
