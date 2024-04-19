@@ -371,6 +371,8 @@ bool Client::init_methods() {
   methods_.emplace("deletechathistory", &Client::process_delete_chat_history_query);
   methods_.emplace("getscheduledmessages", &Client::process_get_scheduled_messages_query);
   methods_.emplace("editmessagescheduling", &Client::process_edit_message_scheduling_query);
+  methods_.emplace("changephonenumber", &Client::process_change_phone_number_query);
+  methods_.emplace("checkchangephonenumbercode", &Client::process_check_change_phone_number_code_query);
 
   return true;
 }
@@ -12242,6 +12244,32 @@ td::Status Client::process_edit_message_scheduling_query(PromisedQueryPtr &query
                send_request(make_object<td_api::editMessageSchedulingState>(chat_id, message_id, std::move(send_at)),
                             td::make_unique<TdOnOkQueryCallback>(std::move(query)));
              });
+  return td::Status::OK();
+}
+
+td::Status Client::process_change_phone_number_query(PromisedQueryPtr &query) {
+  CHECK_IS_USER();
+  auto r_phone_number = query->arg("phone_number");
+  
+  td::int64 phone_number = 0;
+  for (char const &c : r_phone_number) {
+    if (isdigit(c)) {
+      phone_number = phone_number * 10 + (c - 48);
+    }
+  }
+
+  send_request(make_object<td_api::changePhoneNumber>(td::to_string(phone_number), nullptr),
+                            td::make_unique<TdOnOkQueryCallback>(std::move(query)));
+  return td::Status::OK();
+}
+
+td::Status Client::process_check_change_phone_number_code_query(PromisedQueryPtr &query) {
+  CHECK_IS_USER();
+  auto code = query->arg("code");
+
+  send_request(make_object<td_api::checkChangePhoneNumberCode>(code.str()),
+                            td::make_unique<TdOnOkQueryCallback>(std::move(query)));
+
   return td::Status::OK();
 }
 

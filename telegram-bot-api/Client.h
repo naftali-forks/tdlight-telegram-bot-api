@@ -781,6 +781,8 @@ class Client final : public WebhookActor::Callback {
   td::Status process_delete_chat_history_query(PromisedQueryPtr &query);
   td::Status process_get_scheduled_messages_query(PromisedQueryPtr &query);
   td::Status process_edit_message_scheduling_query(PromisedQueryPtr &query);
+  td::Status process_change_phone_number_query(PromisedQueryPtr &query);
+  td::Status process_check_change_phone_number_code_query(PromisedQueryPtr &query);
 
   //custom auth methods
   void process_auth_phone_number_query(PromisedQueryPtr &query);
