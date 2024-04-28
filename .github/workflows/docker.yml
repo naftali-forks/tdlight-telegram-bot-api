@@ -136,12 +136,12 @@ jobs:
       - name: Load environment info and built images
         run: |
           cat github_env/github.env > $GITHUB_ENV
-          docker load --input image_linux386/linux386.tar
+          # docker load --input image_linux386/linux386.tar
           docker load --input image_linuxamd64/linuxamd64.tar
-          docker load --input image_linuxarmv6/linuxarmv6.tar
-          docker load --input image_linuxarmv7/linuxarmv7.tar
-          docker load --input image_linuxarm64/linuxarm64.tar
-          docker load --input image_linuxppc64le/linuxppc64le.tar
+          # docker load --input image_linuxarmv6/linuxarmv6.tar
+          # docker load --input image_linuxarmv7/linuxarmv7.tar
+          # docker load --input image_linuxarm64/linuxarm64.tar
+          # docker load --input image_linuxppc64le/linuxppc64le.tar
 
       - name: Login to ghcr registry
         uses: docker/login-action@v3.1.0
@@ -154,27 +154,27 @@ jobs:
         run: |
           # -- Push to ghcr.io
           docker manifest create ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }} \
-          --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linux386 \
+          # --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linux386 \
           --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxamd64 \
-          --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarmv6 \
-          --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarmv7 \
-          --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarm64 \
-          --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxppc64le
+          # --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarmv6 \
+          # --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarmv7 \
+          # --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarm64 \
+          # --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxppc64le
           #docker manifest push ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}
 
           # Tag images as VERSION (like 'latest')
-          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linux386 ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linux386
+          # docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linux386 ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linux386
           docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxamd64 ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxamd64
-          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarmv6 ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv6
-          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarmv7 ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv7
-          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarm64 ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarm64
-          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxppc64le ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxppc64le
+          # docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarmv6 ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv6
+          # docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarmv7 ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv7
+          # docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarm64 ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarm64
+          # docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxppc64le ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxppc64le
 
           docker manifest create ${{ env.IMAGE_TAG }}:${{ env.VERSION }} \
-          --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linux386 \
+          # --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linux386 \
           --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxamd64 \
-          --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv6 \
-          --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv7 \
-          --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarm64 \
-          --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxppc64le
+          # --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv6 \
+          # --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv7 \
+          # --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarm64 \
+          # --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxppc64le
           #docker manifest push ${{ env.IMAGE_TAG }}:${{ env.VERSION }}
