@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Checkout current repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: "recursive"
 
@@ -56,30 +56,33 @@ jobs:
           # Save env to file
           cat $GITHUB_ENV > github.env
 
-      # - name: Upload environment info as artifact
-      #   uses: actions/upload-artifact@v4.3.3        
-      #   with:
-      #     name: github_env
-      #     path: github.env
+      - name: Upload environment info as artifact
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: github_env
+          path: github.env
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3.0.0
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3.3.0
 
-      # - name: Cache Docker layers
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: /tmp/.buildx-cache
-      #     key: ${{ runner.os }}-buildx-${{ env.SAFE_ARCH }}-${{ github.sha }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-buildx-${{ env.SAFE_ARCH }}-
+      - name: Cache Docker layers
+        uses: actions/cache@v4.0.2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ env.SAFE_ARCH }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-${{ env.SAFE_ARCH }}-
 
       - name: Login to ghcr registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3.1.0
         if: ${{ github.event_name != 'pull_request' }}
         with:
-          registry: ${{ vars.REGISTRY_URL }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN}}
 
       - name: Build image
         uses: docker/build-push-action@v2
@@ -99,7 +102,6 @@ jobs:
         run: |
           docker tag tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }}
           docker tag tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
-          docker tag tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
           docker push ${{ env.IMAGE_TAG}}:${{ env.HASH_VERSION}}-${{ env.SAFE_ARCH }}
           docker push ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
 
@@ -113,11 +115,11 @@ jobs:
         run: |
           docker save tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} -o ${{ env.SAFE_ARCH }}.tar
 
-      # - name: Upload image as artifact
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: image_${{ env.SAFE_ARCH }}
-      #     path: ${{ env.SAFE_ARCH }}.tar
+      - name: Upload image as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: image_${{ env.SAFE_ARCH }}
+          path: ${{ env.SAFE_ARCH }}.tar
 
   push-manifest:
     name: Create and push multi-arch Docker manifest
@@ -145,8 +147,8 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: ${{ secrets.GH_USERNAME }}
-          password: ${{ secrets.GH_ACCESS_TOKEN }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN}}
 
       - name: Create and push manifest
         run: |
@@ -176,11 +178,3 @@ jobs:
           --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarm64 \
           --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxppc64le
           #docker manifest push ${{ env.IMAGE_TAG }}:${{ env.VERSION }}
-
-          # Tag images as VERSION (like 'latest')
-          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linux386 ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linux386
-          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxamd64 ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxamd64
-          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarmv6 ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxarmv6
-          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarmv7 ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxarmv7
-          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarm64 ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxarm64
-          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxppc64le ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxppc64le
