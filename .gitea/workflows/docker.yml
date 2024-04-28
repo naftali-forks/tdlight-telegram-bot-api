@@ -43,8 +43,8 @@ jobs:
           platforms: ${{ matrix.arch }}
           push: true
           tags: |
-            ${{ vars.REGISTRY_URL }}/tdlightbotapi:${{gitea.sha}}
-            ${{ vars.REGISTRY_URL }}/tdlightbotapi:latest
+            ${{ vars.REGISTRY_URL }}/${{ github.repository }}:${{gitea.sha}}
+            ${{ vars.REGISTRY_URL }}/${{ github.repository }}:latest
           # tags: ${{ steps.meta.outputs.tags }}
           # labels: ${{ steps.meta.outputs.labels }}
 
