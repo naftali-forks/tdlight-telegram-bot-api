@@ -10,7 +10,7 @@ jobs:
     name: Build Docker image (${{ matrix.arch }})
     runs-on: ubuntu-latest
     env:
-      IMAGE_TAG: ${{ vars.REGISTRY_URL }}/${{ github.repository_owner }}/${{ github.repository }}
+      IMAGE_TAG: ${{ vars.REGISTRY_URL }}/${{ github.repository }}
     strategy:
       matrix:
         arch: [linux/amd64]
