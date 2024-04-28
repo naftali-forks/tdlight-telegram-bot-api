@@ -42,8 +42,11 @@ jobs:
           file: ./Dockerfile
           platforms: ${{ matrix.arch }}
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: |
+            ${{ vars.REGISTRY_URL }}/tdlightbotapi:${{gitea.sha}}
+            ${{ vars.REGISTRY_URL }}/tdlightbotapi:latest
+          # tags: ${{ steps.meta.outputs.tags }}
+          # labels: ${{ steps.meta.outputs.labels }}
 
       # - name: Tag and push image
       #   if: ${{ github.event_name != 'pull_request' }}
