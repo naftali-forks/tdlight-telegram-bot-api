@@ -26,8 +26,8 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         with:
           registry: ${{ vars.REGISTRY_URL }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ gitea.repository_owner }}
+          password: ${{ secrets.GITEA_TOKEN}}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
