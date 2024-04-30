@@ -1,4 +1,4 @@
-name: Docker multi-arch build and push
+name: Docker multi-arch build and push - gitea
 
 on:
   push:
@@ -43,8 +43,8 @@ jobs:
           platforms: ${{ matrix.arch }}
           push: true
           tags: |
-            ${{ vars.REGISTRY_URL }}/${{ github.repository }}:${{gitea.sha}}
-            ${{ vars.REGISTRY_URL }}/${{ github.repository }}:latest
+            ${{ vars.REGISTRY_URL }}/tdlight-telegram-bot-api2:${{gitea.sha}}
+            ${{ vars.REGISTRY_URL }}/tdlight-telegram-bot-api2:latest
           # tags: ${{ steps.meta.outputs.tags }}
           # labels: ${{ steps.meta.outputs.labels }}
 
