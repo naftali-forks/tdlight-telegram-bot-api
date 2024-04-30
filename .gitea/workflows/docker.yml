@@ -28,7 +28,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ vars.REGISTRY_URL }}/private-images/tdlight
+          images: ${{ vars.REGISTRY_URL }}/${{ gitea.actor }}/tdlightbotapi
 
       - name: Build image
         uses: docker/build-push-action@v5
