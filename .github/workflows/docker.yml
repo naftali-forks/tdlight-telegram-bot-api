@@ -91,7 +91,8 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,mode=max,dest=/tmp/.buildx-cache
           platforms: ${{ matrix.arch }}
-          push: true
+          push: false
+          load: true
           tags: |
             tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }}
 
