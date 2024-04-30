@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Build Docker image (${{ matrix.arch }})
+    name: Build Docker image
     runs-on: ubuntu-latest
 
     steps:
@@ -28,7 +28,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ vars.REGISTRY_URL }}/${{ gitea.actor }}/tdlightbotapi
+          images: ${{ vars.REGISTRY_URL }}/${{ gitea.repository_owner }}/tdlightbotapi
 
       - name: Build image
         uses: docker/build-push-action@v5
