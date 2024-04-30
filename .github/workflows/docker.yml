@@ -4,7 +4,6 @@ on:
   push:
   pull_request:
 
-
 jobs:
   build:
     name: Build Docker image (${{ matrix.arch }})
@@ -94,8 +93,8 @@ jobs:
           platforms: ${{ matrix.arch }}
           push: true
           tags: |
-            tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }}
-            tdlightbotapi:latest
+            ${{ env.IMAGE_TAG}}:${{ env.HASH_VERSION}}-${{ env.SAFE_ARCH }}
+            ${{ env.IMAGE_TAG}}:latest
 
       # - name: Tag and push image
       #   if: ${{ github.event_name != 'pull_request' }}
