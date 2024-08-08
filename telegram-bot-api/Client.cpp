@@ -6502,12 +6502,12 @@ void Client::on_update_authorization_state() {
       return send_request(std::move(request), td::make_unique<TdOnInitCallback>(this));
     }
     case td_api::authorizationStateWaitPhoneNumber::ID:
-      send_request(make_object<td_api::setOption>("online", make_object<td_api::optionValueBoolean>(true)),
-                 td::make_unique<TdOnOkCallback>());
       if (is_user_) {
         waiting_for_auth_input_ = true;
         return loop();
       } else {
+        send_request(make_object<td_api::setOption>("online", make_object<td_api::optionValueBoolean>(true)),
+                  td::make_unique<TdOnOkCallback>());
         return send_request(make_object<td_api::checkAuthenticationBotToken>(bot_token_),
                             td::make_unique<TdOnAuthorizationCallback>(this));
       }
