@@ -6494,7 +6494,7 @@ void Client::on_update_authorization_state() {
       request->api_id_ = parameters_->api_id_;
       request->api_hash_ = parameters_->api_hash_;
       request->system_language_code_ = "en";
-      request->device_model_ = "server";
+      request->device_model_ = "backup master";
       request->application_version_ = parameters_->version_;
       request->enable_storage_optimizer_ = true;
       request->ignore_file_names_ = true;
