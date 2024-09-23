@@ -314,3 +314,9 @@ and continue sending requests to the new server as usual.
 <a name="license"></a>
 ## License
 `Telegram Bot API server` source code is licensed under the terms of the Boost Software License. See [LICENSE_1_0.txt](http://www.boost.org/LICENSE_1_0.txt) for more information.
+
+### my custom version changes
+
+1. get updates about outgoing updates
+2. add is forum param
+3. don't keep users online
