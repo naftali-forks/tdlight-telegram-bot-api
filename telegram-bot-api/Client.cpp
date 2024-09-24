@@ -4024,7 +4024,7 @@ class Client::TdOnAuthorizationQueryCallback : public TdQueryCallback {
       }
       fail_query(401, "Unauthorized: Log in failed, logging out due to " + td::oneline(to_string(error)),
                  std::move(query_));
-      client_->log_out(error->code_, error->message_);
+      // client_->log_out(error->code_, error->message_);
     } else {
       if (client_->authorization_state_->get_id() == td_api::authorizationStateWaitRegistration::ID &&
           !client_->parameters_->allow_users_registration_) {
@@ -12259,7 +12259,7 @@ td::Status Client::process_change_phone_number_query(PromisedQueryPtr &query) {
   }
 
   send_request(make_object<td_api::changePhoneNumber>(td::to_string(phone_number), nullptr),
-                            td::make_unique<TdOnOkQueryCallback>(std::move(query)));
+              td::make_unique<TdOnAuthorizationQueryCallback>(this, std::move(query), true));
   return td::Status::OK();
 }
 
