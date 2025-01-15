@@ -686,6 +686,9 @@ class Client final : public WebhookActor::Callback {
   static td::Result<td_api::object_ptr<td_api::SearchMessagesFilter>> get_search_messages_filter(
       const Query *query, td::Slice field_name = td::Slice("filter"));
 
+  static td::Result<td_api::object_ptr<td_api::SearchMessagesChatTypeFilter>> get_search_messages_chat_type_filter(
+      const Query *query, td::Slice field_name = td::Slice("chat_filter"));
+
   // end custom helper methods
 
   void on_message_send_succeeded(object_ptr<td_api::message> &&message, int64 old_message_id);
@@ -752,6 +755,10 @@ class Client final : public WebhookActor::Callback {
   td::Status process_edit_user_star_subscription_query(PromisedQueryPtr &query);
   td::Status process_get_available_gifts_query(PromisedQueryPtr &query);
   td::Status process_send_gift_query(PromisedQueryPtr &query);
+  td::Status process_verify_user_query(PromisedQueryPtr &query);
+  td::Status process_verify_chat_query(PromisedQueryPtr &query);
+  td::Status process_remove_user_verification_query(PromisedQueryPtr &query);
+  td::Status process_remove_chat_verification_query(PromisedQueryPtr &query);
   td::Status process_set_game_score_query(PromisedQueryPtr &query);
   td::Status process_get_game_high_scores_query(PromisedQueryPtr &query);
   td::Status process_answer_web_app_query_query(PromisedQueryPtr &query);
@@ -961,6 +968,7 @@ class Client final : public WebhookActor::Callback {
     // start custom properties
     bool is_verified = false;
     bool is_scam = false;
+    bool is_fake = false;
     object_ptr<td_api::UserStatus> status;
     // end custom properties
 
@@ -1023,6 +1031,7 @@ class Client final : public WebhookActor::Callback {
     // start custom properties
     bool is_verified = false;
     bool is_scam = false;
+    bool is_fake = false;
     // end custom properties
   };
   static void add_supergroup(SupergroupInfo *supergroup_info, object_ptr<td_api::supergroup> &&supergroup);
